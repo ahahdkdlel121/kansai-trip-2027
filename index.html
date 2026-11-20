@@ -1552,6 +1552,7 @@ const LG = (()=>{
   const START_CASH=35000, START_CARD_KRW=946152;
   let D={names:['나','친구1','친구2'], rate:844, items:[]};
   try{ const x=JSON.parse(localStorage.getItem(KEY)||'null'); if(x&&x.items) D=Object.assign(D,x); }catch(e){}
+  try{ const h=location.hash.match(/names=([^&]+)/); if(h){ const arr=decodeURIComponent(h[1]).split(',').map(x=>x.trim()).filter(Boolean).slice(0,3); if(arr.length===3){ D.names=arr; try{ localStorage.setItem(KEY, JSON.stringify(D)); }catch(e){} } history.replaceState(null,'',location.pathname+location.search); } }catch(e){}
   const save=()=>{ try{ localStorage.setItem(KEY, JSON.stringify(D)); }catch(e){} };
   const yen=it=> it.cur==='KRW' ? Math.round(it.amt*100/D.rate) : it.amt;
   const fmt=n=> Math.round(n).toLocaleString('ko-KR');
