@@ -92,7 +92,8 @@ main.wrap{padding-top:32px;padding-bottom:100px}
 .tag.day{color:#2b8a3e;background:#eaf8ec}
 .tag.sun{color:#d9480f;background:#ffeee5}
 .tag.night{color:#3b4fc4;background:#eceffd}
-.chk{display:inline-block;font-size:11.5px;padding:0 7px;border-radius:4px;border:1px dashed var(--dim);color:var(--muted);white-space:nowrap;margin-left:4px;line-height:1.7;vertical-align:1px}
+.chk{display:inline;font-size:.85em;color:var(--dim);white-space:nowrap;margin-left:2px}
+.chk::before{content:'('}.chk::after{content:')'}
 .warnchip{display:inline-block;font-size:12px;font-weight:700;padding:1px 8px;border-radius:5px;background:#fff1d6;color:#9a5b00;border:1px solid #f0c674}
 
 /* overview */
@@ -135,6 +136,14 @@ main.wrap{padding-top:32px;padding-bottom:100px}
 .btable tr.sum td{font-weight:800;font-size:16.5px;background:#fff6e6}
 .btable td:not(:first-child){white-space:nowrap}
 @media(max-width:600px){
+ .cmpwrap table.cmp{min-width:0;table-layout:auto}
+ .cmpwrap table.cmp thead{display:none}
+ .cmpwrap table.cmp,.cmpwrap table.cmp tbody{display:block;width:100%}
+ .cmpwrap table.cmp tr{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px 12px;padding:12px 14px;border-bottom:1px solid var(--line)}
+ .cmpwrap table.cmp td{display:block;padding:0!important;border:0!important;background:none!important;width:auto!important;white-space:normal!important;font-size:14.5px;line-height:1.6}
+ .cmpwrap table.cmp td:first-child{grid-column:1/-1;font-weight:800;font-size:15.5px}
+ .cmpwrap table.cmp td:first-child br{display:none}
+ .cmpwrap table.cmp td[data-label]:not(:first-child)::before{content:attr(data-label);display:block;font-size:11.5px;font-weight:800;color:var(--dim);margin-bottom:1px}
  .cmpwrap .btable thead{display:none}
  .cmpwrap .btable,.cmpwrap .btable tbody{display:block;width:100%}
  .cmpwrap .btable tr{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px 12px;padding:12px 14px;border-bottom:1px solid var(--line)}
@@ -153,7 +162,8 @@ main.wrap{padding-top:32px;padding-bottom:100px}
 .spl span{font-size:14px;color:var(--muted)}
 .spl em{font-style:normal;font-size:13px;font-weight:700;color:var(--red)}
 
-.legend{display:flex;flex-wrap:wrap;gap:10px 14px;font-size:14px;color:var(--muted);align-items:center;line-height:1.5}
+.legend{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:10px 14px;font-size:14px;color:var(--muted);line-height:1.5}
+.legend .li{display:flex;align-items:center;gap:8px;white-space:nowrap}
 
 /* version */
 .vhead{border-radius:18px;padding:24px;color:#fff;display:grid;gap:8px}
@@ -178,6 +188,7 @@ main.wrap{padding-top:32px;padding-bottom:100px}
 .mapgrid.two{grid-template-columns:repeat(2,minmax(0,1fr))}
 @media(max-width:760px){.mapgrid.two{grid-template-columns:1fr}}
 .mapgrid .map{height:340px}
+.map,#m-over{position:relative;z-index:0}
 @media(max-width:760px){.mapgrid .map{height:380px}}
 .bagnote{display:flex;gap:12px;align-items:flex-start;background:#eef3fb;border:1px solid #cfdbef;border-radius:12px;padding:13px 16px;font-size:14.5px;line-height:1.65}
 .bagnote .ic{font-size:20px;line-height:1.3}
@@ -210,6 +221,7 @@ main.wrap{padding-top:32px;padding-bottom:100px}
 @media(max-width:640px){.spot{grid-template-columns:1fr}.spot .pic{min-height:0;aspect-ratio:16/9}}
 .spot.stayc{grid-template-columns:1fr;border-color:#cfd6e4;background:#f2f5fb}
 .spot.stayc .bd{padding:13px 16px;gap:4px}
+.spot .memo{font-size:14.5px;font-weight:700;color:var(--ink);line-height:1.55}
 .spot.stayc h4{font-size:16.5px;display:flex;gap:8px;align-items:center;flex-wrap:wrap}
 .spot.hubc{grid-template-columns:1fr;background:transparent;border:1px dashed var(--line2)}
 .spot.hubc .bd{padding:9px 14px;gap:2px}
@@ -231,7 +243,8 @@ main.wrap{padding-top:32px;padding-bottom:100px}
 .altrow .or{font-size:12.5px;font-weight:800;color:var(--muted);background:var(--paper2);border-radius:6px;padding:2px 8px}
 .rec{display:inline-flex;align-items:center;gap:7px;padding:5px 12px;border-radius:10px;background:var(--card);border:1px solid var(--line);flex-wrap:wrap}
 .rec .lb{font-size:12px;font-weight:800;color:#fff;border-radius:5px;padding:1px 7px;line-height:1.6;white-space:nowrap}
-.rec .c{font-weight:800;color:var(--ink);font-variant-numeric:tabular-nums;white-space:nowrap}
+.rec .c{font-weight:800;color:var(--ink);font-variant-numeric:tabular-nums;white-space:nowrap;background:var(--paper2);border-radius:6px;padding:0 7px}
+@media(max-width:600px){.rec{display:grid;grid-template-columns:auto minmax(0,1fr);gap:6px 10px;width:100%;align-items:start}.rec .lb{grid-row:1}.rec .dsc{grid-column:1/-1;line-height:1.55}.rec .c{grid-row:1;grid-column:2;justify-self:end}}
 
 /* toggles */
 details.more{border:1px solid var(--line);border-radius:14px;background:var(--card)}
@@ -297,6 +310,12 @@ ul.pts li::marker,ol.pts li::marker{color:var(--red);font-weight:800}
 .jump{display:flex;flex-wrap:wrap;gap:8px;margin-top:4px}
 .tab.money[aria-selected=true]{background:#2b8a3e}
 .dayline{display:grid;gap:8px}
+.feelist{background:var(--card);border:1px solid var(--line);border-radius:16px;overflow:hidden}
+.feelist>div{display:flex;justify-content:space-between;align-items:flex-start;gap:14px;padding:13px 16px;border-top:1px solid var(--line)}
+.feelist>div:first-child{border-top:0}
+.feelist span{font-size:15px;font-weight:700;line-height:1.5}.feelist small{display:block;font-size:12.5px;font-weight:500;color:var(--muted)}
+.feelist b{font-size:16px;white-space:nowrap;font-variant-numeric:tabular-nums}
+.feelist .sum{background:#fff6e5}.feelist .sum span,.feelist .sum b{color:var(--red)}
 .dayline>div{display:grid;grid-template-columns:76px minmax(0,1fr);gap:12px;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px 16px;font-size:14.5px;line-height:1.6}
 .dayline b{color:var(--red)}
 .bk{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:18px;display:grid;gap:12px;align-content:start;min-width:0}
@@ -371,6 +390,7 @@ ul.pts li::marker,ol.pts li::marker{color:var(--red);font-weight:800}
 .txs.warn{background:#fff8e6;border-color:#f0d49a}.txs.warn .tn{background:#d9910b}
 .txs>div>b{font-size:16.5px;display:block;margin:2px 0 6px}
 .txs .pts{margin:0}
+@media(max-width:600px){.txs{display:block;padding:14px 16px}.txs .tn{float:left;width:26px;height:26px;font-size:13px;margin:0 10px 0 0}.txs>div>b{margin:1px 0 8px;line-height:1.5}.txs .pts{clear:both;padding-left:18px;gap:8px;line-height:1.65}}
 .chklist{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
 @media(max-width:700px){.chklist{grid-template-columns:1fr}}
 .cg{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px 18px;display:grid;gap:4px;align-content:start}
@@ -411,7 +431,7 @@ table.cmp tbody td:nth-child(2){background:#fff9f7} table.cmp tbody td:nth-child
 .callout b{color:var(--red)}
 .callout.blue{border-left-color:#1c7ed6}.callout.blue b{color:#1864ab}
 .src{margin:0;padding-left:18px;font-size:13px;color:var(--dim);display:grid;gap:4px;line-height:1.6;word-break:break-all}
-footer{border-top:1px solid var(--line);padding:22px 0 40px;font-size:13px;color:var(--dim);line-height:1.7}
+footer{border-top:1px solid var(--line);padding:22px 0 110px;font-size:13px;color:var(--dim);line-height:1.7}
 
 .leaflet-container{font-family:var(--sans)}
 .pin{width:28px;height:28px;border-radius:50%;color:#fff;font-weight:800;font-size:12.5px;display:grid;place-items:center;border:2.5px solid #fff;box-shadow:0 2px 6px rgba(0,0,0,.35);line-height:1}
@@ -531,9 +551,9 @@ footer{border-top:1px solid var(--line);padding:22px 0 40px;font-size:13px;color
   </div>
 
   <div class="card block" style="gap:14px"><b style="font-size:17px">이렇게 읽어요</b>
-    <div class="legend"><span class="tag am">아침 일찍</span>사람 적을 때 <span class="tag day">낮</span>일찍 닫거나 밝을 때 <span class="tag sun">노을</span>17:20 전후 <span class="tag night">저녁·야경</span>불 켜진 뒤</div>
-    <div class="legend"><span class="w ok">🚶 도보 10분</span>걸어갈 만함 <span class="w long">🚶 도보 35분</span>길어요 → 옆 교통 추천 <span class="w no">🚶 도보 ✕</span>너무 멀어요</div>
-    <p class="note">걷는 시간을 먼저, 그 옆에 추천 대중교통과 1인 요금을 적었어요. 걷는 시간은 지도상 거리로 잡은 대략값이에요.</p>
+    <div class="legend"><span class="li"><span class="tag am">아침 일찍</span>사람 적을 때</span><span class="li"><span class="tag day">낮</span>일찍 닫거나 밝을 때</span><span class="li"><span class="tag sun">노을</span>17:20 전후</span><span class="li"><span class="tag night">저녁·야경</span>불 켜진 뒤</span></div>
+    <div class="legend"><span class="li"><span class="w ok">🚶 도보 10분</span>걸어갈 만함</span><span class="li"><span class="w long">🚶 도보 35분</span>길어요 → 아래 교통 추천</span><span class="li"><span class="w no">🚶 도보 ✕</span>너무 멀어요</span></div>
+    <p class="note">걷는 시간을 먼저, 그 아래에 추천 교통과 1인 요금을 적었어요. 걷는 시간은 지도상 거리로 잡은 대략값이에요.</p>
   </div>
 </section>
 
@@ -701,12 +721,12 @@ footer{border-top:1px solid var(--line);padding:22px 0 40px;font-size:13px;color
     <div class="cmpwrap tw"><table class="cmp">
     <thead><tr><th class="k">구간</th><th class="busy">🚕 택시</th><th class="calm">🚃 대중교통</th></tr></thead>
     <tbody>
-      <tr><td class="k">바쁜 1일째<br>후시미이나리 → 기요미즈데라</td><td>약 15분<br><b>1인 약 700~800엔</b></td><td>게이한 + 오르막 도보 20~25분<br>총 약 40분 · <b>1인 약 220엔</b><br><small>오르막이 길어서 택시 추천</small></td></tr>
-      <tr><td class="k">바쁜 1일째<br>폰토초 → 교토역 숙소</td><td>약 15분<br><b>1인 약 500~600엔</b></td><td>시 버스 4·17·205번<br>총 약 30분 · <b>1인 230엔</b></td></tr>
-      <tr><td class="k">여유 1일째<br>교토역 → 야사카 신사</td><td>약 15분<br><b>1인 약 500~600엔</b></td><td>시 버스 206·86번<br>총 약 30분 · <b>1인 230엔</b><br><small>관광객으로 붐빔</small></td></tr>
-      <tr><td class="k">여유 1일째<br>시라카와 → 교토역 숙소</td><td>약 15분<br><b>1인 약 500~600엔</b></td><td>시 버스 206·86번<br>총 약 30분 · <b>1인 230엔</b></td></tr>
-      <tr><td class="k">여유 2일째<br>교토역 → 기요미즈데라</td><td>약 10~15분<br><b>1인 약 450~550엔</b></td><td>시 버스 + 오르막 도보 10~15분<br>총 약 35분 · <b>1인 230엔</b><br><small>아침 버스는 매우 혼잡해서 택시 추천</small></td></tr>
-      <tr><td class="k">여유 3일째<br>남바 → 난바 야사카 신사</td><td>약 5분<br><b>1인 약 250~300엔</b></td><td>지하철 1정거장 + 도보 5분 · <b>1인 190엔</b><br><small>그냥 걸어도 15분</small></td></tr>
+      <tr><td class="k">바쁜 1일째 · 후시미이나리 → 기요미즈데라</td><td>약 15분<br><b>1인 약 700~800엔</b></td><td>게이한 + 오르막 도보 20~25분<br>총 약 40분 · <b>1인 약 220엔</b><br><small>오르막이 길어서 택시 추천</small></td></tr>
+      <tr><td class="k">바쁜 1일째 · 폰토초 → 교토역 숙소</td><td>약 15분<br><b>1인 약 500~600엔</b></td><td>시 버스 4·17·205번<br>총 약 30분 · <b>1인 230엔</b></td></tr>
+      <tr><td class="k">여유 1일째 · 교토역 → 야사카 신사</td><td>약 15분<br><b>1인 약 500~600엔</b></td><td>시 버스 206·86번<br>총 약 30분 · <b>1인 230엔</b><br><small>관광객으로 붐빔</small></td></tr>
+      <tr><td class="k">여유 1일째 · 시라카와 → 교토역 숙소</td><td>약 15분<br><b>1인 약 500~600엔</b></td><td>시 버스 206·86번<br>총 약 30분 · <b>1인 230엔</b></td></tr>
+      <tr><td class="k">여유 2일째 · 교토역 → 기요미즈데라</td><td>약 10~15분<br><b>1인 약 450~550엔</b></td><td>시 버스 + 오르막 도보 10~15분<br>총 약 35분 · <b>1인 230엔</b><br><small>아침 버스는 매우 혼잡해서 택시 추천</small></td></tr>
+      <tr><td class="k">여유 3일째 · 남바 → 난바 야사카 신사</td><td>약 5분<br><b>1인 약 250~300엔</b></td><td>지하철 1정거장 + 도보 5분 · <b>1인 190엔</b><br><small>그냥 걸어도 15분</small></td></tr>
       <tr class="sum"><td class="k">합계 차이</td><td>바쁜 버전 1인 약 1,200~1,400엔<br>여유 버전 1인 약 1,700~2,050엔</td><td>바쁜 버전 1인 약 450엔<br>여유 버전 1인 약 880엔<br><small>→ 대중교통이 1인 약 750~1,200엔 저렴, 대신 구간마다 15~25분 더 걸림</small></td></tr>
     </tbody></table></div>
   </div></details>
@@ -797,15 +817,13 @@ footer{border-top:1px solid var(--line);padding:22px 0 40px;font-size:13px;color
   </div>
 
   <div class="block"><h3>💸 회비 · 미리 낸 돈</h3>
-    <div class="cmpwrap tw"><table class="btable">
-      <thead><tr><th class="k">항목</th><th class="busy">금액</th><th class="calm">메모</th></tr></thead>
-      <tbody>
-        <tr><td>회비 (7개월)</td><td>2,700,000원</td><td>26.7~8월 20만원 · 26.9~27.1월 10만원 (3명)</td></tr>
-        <tr><td>항공권 3인 왕복</td><td>− 984,898원</td><td>26.10.07</td></tr>
-        <tr><td>숙소 3박 3인</td><td>− 473,403원</td><td>숙박세 별도</td></tr>
-        <tr><td>환전 35,000엔</td><td>− 295,547원</td><td>26.10.07 · 100엔 = 844원 → 공금 현금</td></tr>
-        <tr class="sum"><td>남은 회비 (원)</td><td>946,152원</td><td>1인 약 315,384원</td></tr>
-      </tbody></table></div>
+    <div class="feelist">
+      <div><span>회비 (7개월 · 3명)<small>26.7~8월 월 20만원 · 26.9~27.1월 월 10만원</small></span><b>2,700,000원</b></div>
+      <div><span>항공권 3인 왕복<small>26.10.07</small></span><b>− 984,898원</b></div>
+      <div><span>숙소 3박 3인<small>숙박세 별도</small></span><b>− 473,403원</b></div>
+      <div><span>환전 35,000엔<small>26.10.07 · 100엔 = 844원 → 공금 현금</small></span><b>− 295,547원</b></div>
+      <div class="sum"><span>남은 회비<small>1인 약 315,384원</small></span><b>946,152원</b></div>
+    </div>
     <p class="note">여행 중 공금 = <b>현금 35,000엔</b> + <b>남은 회비 946,152원</b> (트래블카드에 충전해 공용 카드로 쓰면 편해요). 쓴 돈은 10 가계부 탭에 바로 적어요.</p>
   </div>
 
@@ -1535,7 +1553,7 @@ function dayHTML(D, key, di){
         ${near?`<div class="near"><span class="lb">근처에서</span>${near}</div>`:''}</div></div>`;
     } else if(kind==='stay'){
       num = `<div class="num st">숙</div>`;
-      card = `<div class="spot stayc"><div class="bd"><h4><span class="badge">숙소</span>${p.n}</h4><p class="info">${p.one}${r[2]?` · <b style="color:var(--ink)">${r[2]}</b>`:''}</p>${r[1]?`<div class="tags">${tags(r[1])}</div>`:''}</div></div>`;
+      card = `<div class="spot stayc"><div class="bd"><h4><span class="badge">숙소</span>${p.n}</h4><p class="info">${p.one}</p>${r[2]?`<p class="memo">${r[2]}</p>`:''}${r[1]?`<div class="tags">${tags(r[1])}</div>`:''}</div></div>`;
     } else {
       num = `<div class="num hb"></div>`;
       card = `<div class="spot hubc"><div class="bd"><h4>${p.n}</h4><p class="one">${p.one}${r[2]?` · ${r[2]}`:''}</p></div></div>`;
@@ -1548,11 +1566,11 @@ function dayHTML(D, key, di){
       else { const w = walkInfo(r[0], n[0], r[6]); wHTML = `<span class="w ${w.cls}">${w.txt}</span>${w.sub?`<span class="wsub">${w.sub}</span>`:''}`; }
       let rec = '';
       if(r[3]==='walk') rec = `<span class="rec"><span class="lb" style="background:${MODE.walk.c}">추천</span>그냥 걸어가요</span>`;
-      else if(md) rec = `<span class="arrow">→</span><span class="rec"><span class="lb" style="background:${md.c}">${md.i} ${md.n}</span>${r[4]}${r[5]?` · <span class="c">${r[5]}</span>`:''}</span>`;
+      else if(md) rec = `<span class="arrow">→</span><span class="rec"><span class="lb" style="background:${md.c}">${md.i} ${md.n}</span><span class="dsc">${r[4]}</span>${r[5]?`<span class="c">${r[5]}</span>`:''}</span>`;
       let alt = '';
       if(r[7]){ const a=r[7], am=MODE[a[0]];
-        rec = `<span class="arrow">→</span><span class="rec"><span class="lb" style="background:${md.c}">${md.i} ${md.n}</span>${r[4]} · <span class="c">${r[5]}</span></span>`;
-        alt = `<div class="altrow"><span class="or">또는</span><span class="rec"><span class="lb" style="background:${am.c}">${am.i} ${am.n}</span>${a[1]} · <span class="c">${a[2]}</span></span></div>`; }
+        rec = `<span class="arrow">→</span><span class="rec"><span class="lb" style="background:${md.c}">${md.i} ${md.n}</span><span class="dsc">${r[4]}</span><span class="c">${r[5]}</span></span>`;
+        alt = `<div class="altrow"><span class="or">또는</span><span class="rec"><span class="lb" style="background:${am.c}">${am.i} ${am.n}</span><span class="dsc">${a[1]}</span><span class="c">${a[2]}</span></span></div>`; }
       tl += `<div class="move"><div class="rail"><div class="line"></div></div><div class="mv">${wHTML}${rec}${alt}</div></div>`;
     }
   });
@@ -1629,7 +1647,7 @@ document.querySelectorAll('.chklist').forEach(cl=>{
     const done=()=>msg.textContent=`"${kw}" 복사했어요. Gmail 검색창에 붙여넣으세요.`;
     try{ navigator.clipboard.writeText(kw).then(done,()=>msg.textContent=`검색어: ${kw}`); }catch(e){ msg.textContent=`검색어: ${kw}`; } });
 })();
-document.querySelectorAll('.cmpwrap .btable').forEach(t=>{
+document.querySelectorAll('.cmpwrap .btable, .cmpwrap table.cmp').forEach(t=>{
   const hs=[...t.querySelectorAll('thead th')].map(th=>th.textContent.trim());
   t.querySelectorAll('tbody tr').forEach(tr=>[...tr.children].forEach((td,i)=>{ if(hs[i]) td.dataset.label=hs[i]; }));
 });
