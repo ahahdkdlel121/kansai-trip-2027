@@ -1,6 +1,10 @@
 <!doctype html>
 <html lang="ko">
 <head>
+<script>(function(){var u=navigator.userAgent||'';if(!/^https?:/.test(location.protocol))return;
+if(/KAKAOTALK/i.test(u)){location.href='kakaotalk://web/openExternal?url='+encodeURIComponent(location.href);}
+else if(/ Line\//i.test(u)&&location.search.indexOf('openExternalBrowser=1')<0){location.href=location.href+(location.search?'&':'?')+'openExternalBrowser=1';}})();</script>
+
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>오사카·교토 3박 4일</title>
@@ -305,7 +309,10 @@ ul.pts li::marker,ol.pts li::marker{color:var(--red);font-weight:800}
 .hotels{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
 @media(max-width:860px){.hotels{grid-template-columns:1fr}}
 .kv{display:grid;grid-template-columns:auto minmax(0,1fr);gap:6px 14px;font-size:14.5px;line-height:1.5}.kv span{color:var(--muted)}
-.lk{display:flex;flex-wrap:wrap;gap:8px}.lk a,.jump a[href^="http"]{color:#1864ab}
+.lk{display:flex;flex-wrap:wrap;gap:8px}
+.kwd{display:flex;flex-wrap:wrap;gap:8px}
+.kwd button{border:1px solid var(--line2);background:var(--paper);border-radius:10px;padding:9px 12px;font-size:14px;font-weight:700;cursor:pointer;color:var(--ink)}
+.lk a.app{background:#fff;border-color:#1864ab}.lk a,.jump a[href^="http"]{color:#1864ab}
 .lk a{border:1px solid var(--line2);border-radius:999px;padding:5px 12px;font-size:13.5px;font-weight:700;text-decoration:none;background:var(--paper)}
 .mstats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
 @media(max-width:760px){.mstats{grid-template-columns:repeat(2,minmax(0,1fr))}}
@@ -755,28 +762,28 @@ footer{border-top:1px solid var(--line);padding:22px 0 40px;font-size:13px;color
     <div class="grid2">
       <div class="bk"><div class="bk-h"><span class="tagx go">가는 편</span><b>MM712</b><span class="d">1/29 (금)</span></div>
         <div class="fl"><div><b>07:30</b><span>인천 제1여객터미널</span></div><div class="ar">1시간 45분 →</div><div><b>09:15</b><span>간사이공항 제2터미널</span></div></div>
-        <label class="ref">예약번호 <input class="refin" data-ref="go" placeholder="눌러서 입력 → 이 폰에 저장" autocomplete="off" autocapitalize="characters"></label>
+        <div class="lk"><a class="app" data-pkg="com.google.android.gm" data-ios="googlegmail://" href="https://mail.google.com/" target="_blank" rel="noopener">✉️ Gmail에서 메일 보기</a><a href="https://www.flypeach.com/ko" target="_blank" rel="noopener">🌐 피치항공</a></div>
         <p class="note">인천 T1에서 피치 체크인은 보통 출발 50분 전(06:40) 마감 → <b>05:30까지 공항 도착</b> 추천. 공항철도 첫차로는 빠듯해서 새벽 공항버스·택시 시간을 미리 확인하세요 <span class="chk">확인 필요</span></p></div>
       <div class="bk"><div class="bk-h"><span class="tagx back">오는 편</span><b>MM701</b><span class="d">2/1 (월)</span></div>
         <div class="fl"><div><b>07:40</b><span>간사이공항 제2터미널</span></div><div class="ar">2시간 5분 →</div><div><b>09:45</b><span>인천 제1여객터미널</span></div></div>
-        <label class="ref">예약번호 <input class="refin" data-ref="back" placeholder="눌러서 입력 → 이 폰에 저장" autocomplete="off" autocapitalize="characters"></label>
+        <div class="lk"><a class="app" data-pkg="com.google.android.gm" data-ios="googlegmail://" href="https://mail.google.com/" target="_blank" rel="noopener">✉️ Gmail에서 메일 보기</a><a href="https://www.flypeach.com/ko" target="_blank" rel="noopener">🌐 피치항공</a></div>
         <p class="note">체크인 마감 06:50 · 면세 키오스크 먼저 → 05:30까지 제2터미널 (05 탭 ②). 셔틀 약도: <a href="https://www.kansai-airport.or.jp/kr/access/t2" target="_blank" rel="noopener">간사이공항 공식 페이지</a></p></div>
     </div>
-    <p class="note">예약번호는 인터넷에 올라가지 않게 비워 뒀어요. 한 번 입력하면 이 휴대폰에만 저장돼요.<br>기내 수하물 7kg (피치는 무게를 재요) · 보조배터리 1인 2개까지, 기내 사용 금지.</p>
+    <p class="note">예약번호·탑승권은 Gmail에 온 피치항공 메일에서 확인해요 (검색어 <b>Peach</b>).<br>기내 수하물 7kg (피치는 무게를 재요) · 보조배터리 1인 2개까지, 기내 사용 금지.</p>
   </div>
 
   <div class="block"><h3>🏨 숙소 3곳</h3>
     <div class="hotels">
       <div class="bk"><div class="bk-h"><span class="tagx n1">1박째</span><b>소테츠 프레사 인 교토 하치조구치</b></div>
         <div class="kv"><span>날짜</span><b>1/29 (금) → 1/30 (토)</b><span>체크인</span><b>15:00</b><span>체크아웃</span><b>11:00</b><span>숙박비 (3인)</span><b>117,500원 · 결제 완료</b><span>숙박세</span><b>1,200엔 (1인 400엔) · 현장 현금</b></div>
-        <div class="lk"><a href="https://www.google.com/maps/search/?api=1&query=Sotetsu+Fresa+Inn+Kyoto+Hachijoguchi" target="_blank" rel="noopener">📍 지도 열기</a></div></div>
+        <div class="lk"><a class="app" data-pkg="com.agoda.mobile.consumer" href="https://www.agoda.com/ko-kr/account/bookings.html" target="_blank" rel="noopener">🅰️ 아고다 앱 (예약)</a><a class="app" data-pkg="com.google.android.gm" data-ios="googlegmail://" href="https://mail.google.com/" target="_blank" rel="noopener">✉️ Gmail에서 메일 보기</a><a href="https://www.google.com/maps/search/?api=1&query=Sotetsu+Fresa+Inn+Kyoto+Hachijoguchi" target="_blank" rel="noopener">📍 지도 열기</a></div></div>
       <div class="bk"><div class="bk-h"><span class="tagx n2">2박째</span><b>홀리데이 인 오사카 남바 바이 IHG</b></div>
         <div class="kv"><span>날짜</span><b>1/30 (토) → 1/31 (일)</b><span>체크인</span><b>13:00</b><span>체크아웃</span><b>11:00</b><span>숙박비 (3인)</span><b>172,630원 · 결제 완료</b><span>숙박세</span><b>1,500엔 (1인 500엔) · 현장 현금</b></div>
-        <div class="lk"><a href="https://www.google.com/maps/search/?api=1&query=Holiday+Inn+Osaka+Namba" target="_blank" rel="noopener">📍 지도 열기</a></div></div>
+        <div class="lk"><a class="app" data-pkg="ctrip.english" href="https://kr.trip.com/order/all" target="_blank" rel="noopener">✈️ 트립닷컴 앱 (예약)</a><a class="app" data-pkg="com.google.android.gm" data-ios="googlegmail://" href="https://mail.google.com/" target="_blank" rel="noopener">✉️ Gmail에서 메일 보기</a><a href="https://www.google.com/maps/search/?api=1&query=Holiday+Inn+Osaka+Namba" target="_blank" rel="noopener">📍 지도 열기</a></div></div>
       <div class="bk"><div class="bk-h"><span class="tagx n3">3박째</span><b>퍼스트 캐빈 간사이 공항</b></div>
         <div class="kv"><span>날짜</span><b>1/31 (일) → 2/1 (월)</b><span>체크인</span><b>17:00</b><span>체크아웃</span><b>10:00 (우리는 05:10 출발)</b><span>숙박비 (3인)</span><b>183,273원 · 결제 완료</b><span>숙박세</span><b>600엔 (1인 200엔) · 현장 현금</b></div>
         <p class="note">체크인이 17시라, 그 전에 도착하면 프런트에 짐 보관 가능한지 확인. 에어로플라자 3층 · 1층이 제2터미널행 버스 승차장.</p>
-        <div class="lk"><a href="https://ko.first-cabin.jp/hotels/kansaikukou/" target="_blank" rel="noopener">🌐 공식 사이트</a><a href="https://www.google.com/maps/search/?api=1&query=First+Cabin+Kansai+Airport" target="_blank" rel="noopener">📍 지도 열기</a></div></div>
+        <div class="lk"><a class="app" data-pkg="com.google.android.gm" data-ios="googlegmail://" href="https://mail.google.com/" target="_blank" rel="noopener">✉️ Gmail에서 메일 보기</a><a href="https://ko.first-cabin.jp/hotels/kansaikukou/" target="_blank" rel="noopener">🌐 공식 사이트</a><a href="https://www.google.com/maps/search/?api=1&query=First+Cabin+Kansai+Airport" target="_blank" rel="noopener">📍 지도 열기</a></div></div>
     </div>
     <p class="note">숙박세 합계 3,300엔 (1인 1,100엔) — 체크인 때 현금으로 낼 수 있게 공금 엔화에서 챙기기.</p>
   </div>
@@ -794,10 +801,22 @@ footer{border-top:1px solid var(--line);padding:22px 0 40px;font-size:13px;color
     <p class="note">여행 중 공금 = <b>현금 35,000엔</b> + <b>남은 회비 946,152원</b> (트래블카드에 충전해 공용 카드로 쓰면 편해요). 쓴 돈은 10 가계부 탭에 바로 적어요.</p>
   </div>
 
+  <div class="block"><h3>✉️ 예약 메일 · 영수증 찾기</h3>
+    <div class="card" style="display:grid;gap:12px">
+      <p style="font-size:15px;line-height:1.7">항공·숙소 안내와 영수증은 모두 Gmail에 있어요. 아래 버튼으로 Gmail 앱을 열고, 검색창에 검색어를 붙여넣으세요. <b>검색어를 누르면 복사</b>돼요.</p>
+      <div class="lk"><a class="app" data-pkg="com.google.android.gm" data-ios="googlegmail://" href="https://mail.google.com/" target="_blank" rel="noopener">✉️ Gmail에서 메일 보기</a></div>
+      <div class="kwd"><button data-kw="Peach">✈️ Peach (항공)</button><button data-kw="Agoda">🏨 Agoda (교토 숙소)</button><button data-kw="Trip.com">🏨 Trip.com (남바 숙소)</button><button data-kw="First Cabin">🏨 First Cabin (공항 숙소)</button><button data-kw="receipt OR 영수증">🧾 영수증</button></div>
+      <p class="note" id="kwMsg">퍼스트 캐빈은 어디서 예약했는지에 따라 메일 제목이 달라요. 안 나오면 "퍼스트 캐빈"으로도 검색해 보세요.</p>
+    </div>
+  </div>
+
   <div class="block"><h3>자주 여는 링크</h3>
     <div class="jump">
       <a href="https://www.vjw.digital.go.jp/" target="_blank" rel="noopener">Visit Japan Web</a>
       <a href="https://www.flypeach.com/ko" target="_blank" rel="noopener">피치항공</a>
+      <a class="app" data-pkg="com.agoda.mobile.consumer" href="https://www.agoda.com/ko-kr/account/bookings.html" target="_blank" rel="noopener">아고다</a>
+      <a class="app" data-pkg="ctrip.english" href="https://kr.trip.com/order/all" target="_blank" rel="noopener">트립닷컴</a>
+      <a class="app" data-pkg="com.google.android.gm" data-ios="googlegmail://" href="https://mail.google.com/" target="_blank" rel="noopener">Gmail</a>
       <a href="https://www.kansai-airport.or.jp/kr/access/t2" target="_blank" rel="noopener">제2터미널 셔틀</a>
       <a href="https://ko.first-cabin.jp/hotels/kansaikukou/" target="_blank" rel="noopener">퍼스트 캐빈</a>
     </div>
@@ -1502,7 +1521,17 @@ document.querySelectorAll('.chklist').forEach(cl=>{
     openTab('prep'); b.disabled=false; msg.textContent= sw?'다 저장했어요! 이제 데이터 없이도 열려요.':'지도는 불러왔지만, 파일로 연 상태라 오프라인 저장은 안 돼요.';
   };
 })();
-document.querySelectorAll('.refin').forEach(i=>{ const k='ref-'+i.dataset.ref; try{ i.value=localStorage.getItem(k)||''; }catch(e){} i.oninput=()=>{ try{ localStorage.setItem(k,i.value.trim().toUpperCase()); }catch(e){} }; });
+(function(){
+  const ua=navigator.userAgent, isAnd=/Android/i.test(ua), isIOS=/iPhone|iPad|iPod/i.test(ua)||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1);
+  document.querySelectorAll('a.app').forEach(a=>{
+    const web=a.getAttribute('href');
+    if(isAnd&&a.dataset.pkg){ a.href=`intent://#Intent;action=android.intent.action.MAIN;category=android.intent.category.LAUNCHER;package=${a.dataset.pkg};S.browser_fallback_url=${encodeURIComponent(web)};end`; a.removeAttribute('target'); }
+    else if(isIOS&&a.dataset.ios){ a.onclick=e=>{ e.preventDefault(); const t=Date.now(); location.href=a.dataset.ios; setTimeout(()=>{ if(Date.now()-t<1600 && !document.hidden) location.href=web; },1200); }; }
+  });
+  document.querySelectorAll('.kwd button').forEach(b=>b.onclick=()=>{ const kw=b.dataset.kw, msg=document.getElementById('kwMsg');
+    const done=()=>msg.textContent=`"${kw}" 복사했어요. Gmail 검색창에 붙여넣으세요.`;
+    try{ navigator.clipboard.writeText(kw).then(done,()=>msg.textContent=`검색어: ${kw}`); }catch(e){ msg.textContent=`검색어: ${kw}`; } });
+})();
 document.querySelectorAll('.cmpwrap .btable').forEach(t=>{
   const hs=[...t.querySelectorAll('thead th')].map(th=>th.textContent.trim());
   t.querySelectorAll('tbody tr').forEach(tr=>[...tr.children].forEach((td,i)=>{ if(hs[i]) td.dataset.label=hs[i]; }));
