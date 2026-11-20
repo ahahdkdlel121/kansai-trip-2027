@@ -1471,7 +1471,7 @@ function dayHTML(D, key, di){
 /* ---------- food ---------- */
 function foodCard(k){
   const f = FOOD[k], lab = {eat:'꼭 먹기',see:'꼭 보기',cvs:'편의점',buy:'쇼핑'}[f.k];
-  return `<div class="food" id="fd-${k}"><div class="pic" style="${bg(k)}">${IMG[k]?'':`<div class="noimg">${f.emo||(f.k==='see'?'📸':f.k==='buy'?'🛍️':'🍡')}</div>`}<span class="kind ${f.k}">${lab}</span></div>
+  return `<div class="food" id="fd-${k}"><div class="pic" style="${bg(k)}">${IMG[k]?'':`<div class="noimg">${f.emo||(f.k==='see'?'📸':f.k==='buy'?'🛍️':'🍡')}</div>`}</div>
     <div class="bd"><h4>${f.n}<small>${f.jp}</small></h4><p>${f.d}</p>
     <div class="meta"><span>📍 ${f.where}</span>${f.price?`<span>💴 ${f.price}</span>`:''}</div></div></div>`;
 }
