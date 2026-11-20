@@ -342,6 +342,13 @@ ul.pts li::marker,ol.pts li::marker{color:var(--red);font-weight:800}
 .bar{display:grid;grid-template-columns:96px minmax(0,1fr) auto;gap:10px;align-items:center;font-size:14px;margin:6px 0}
 .bar i{display:block;height:10px;border-radius:5px;background:#2b8a3e}
 .settle li{margin:4px 0}
+.sync{font-size:14px;font-weight:700;border-radius:12px;padding:10px 14px;background:var(--paper2);line-height:1.6}
+.sync.on{background:#ebfbee;color:#2b8a3e}.sync.off{background:#fff4e6;color:#a8590b}
+.ratenow{font-size:15px}.ratenow b{font-size:18px}
+.mit.wait{border-style:dashed}
+#gsCode{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:12px;width:100%;border:1px solid var(--line2);border-radius:10px;padding:10px;background:#fff}
+#syncSet input{font:inherit;font-size:15px;border:1px solid var(--line2);border-radius:10px;padding:10px 12px;width:100%}
+#syncSet label{display:grid;gap:4px;font-size:13px;font-weight:700;color:var(--muted)}
 
 .jump a{border:1px solid var(--line2);background:var(--card);border-radius:999px;padding:7px 14px;font-size:14px;font-weight:700;color:var(--ink);text-decoration:none}
 [id^="ap-"]{scroll-margin-top:84px}
@@ -942,7 +949,8 @@ footer{border-top:1px solid var(--line);padding:22px 0 40px;font-size:13px;color
 <!-- 10 가계부 -->
 <section class="panel" id="money" data-panel hidden>
   <div class="ph"><div class="eyebrow">Wallet</div><h2>공용 가계부</h2>
-    <p>쓴 돈을 바로 적으면 공금이 얼마 남았는지, 누가 누구에게 얼마 보내야 하는지 자동으로 계산돼요.<br>기록은 <b>이 휴대폰에만</b> 저장돼요. 한 명(총무)이 적는 게 제일 편하고, 각자 적었다면 아래 <b>공유 코드</b>로 합쳐요.</p></div>
+    <p>한 명이 적으면 셋 다 같은 가계부를 봐요. 데이터가 안 될 때 적은 것도 휴대폰에 모아 뒀다가, 연결되면 자동으로 올라가요.</p>
+    <div class="sync" id="mSync">공유 연결 확인 중…</div></div>
 
   <div class="mstats" id="mStats"></div>
 
@@ -960,24 +968,111 @@ footer{border-top:1px solid var(--line);padding:22px 0 40px;font-size:13px;color
     </div>
   </div>
 
+  <div class="block"><h3>환율 · 환전</h3>
+    <div class="card mform">
+      <div class="ratenow" id="rNow"></div>
+      <div class="mrow"><label>오늘 환율 (100엔 = 원)<input id="rDay" type="number" inputmode="decimal" placeholder="예: 905"></label><button class="mbtn sub" id="rDayBtn">적용</button></div>
+      <p class="note">카드로 엔화 결제하면 이 환율로 원화가 계산돼요. 이미 적은 기록은 그때 환율 그대로예요.</p>
+      <b style="font-size:15px;margin-top:4px">환전했어요</b>
+      <div class="mrow"><label>낸 원화<input id="xWon" type="number" inputmode="numeric" placeholder="예: 100000"></label><label>받은 엔화<input id="xYen" type="number" inputmode="numeric" placeholder="예: 11000"></label></div>
+      <div class="mrow"><label>날짜<select id="xDate"><option>1/29</option><option>1/30</option><option>1/31</option><option>2/1</option></select></label><label>어디 돈으로<select id="xFrom"><option value="card">남은 회비 (공금 카드)</option><option value="none">따로 (회비 아님)</option></select></label></div>
+      <button class="mbtn" id="xAdd">환전 기록 · 환율 바로 적용</button>
+      <div id="xList"></div>
+    </div>
+  </div>
+
   <div class="block"><h3>정산</h3><div id="mSettle" class="card"></div></div>
   <div class="block"><h3>분류별</h3><div id="mCats" class="card"></div></div>
   <div class="block"><h3>기록</h3><div id="mList"></div></div>
 
-  <div class="block"><h3>친구 기록 합치기 · 공유</h3>
+  <div class="block"><h3>카톡으로 요약 보내기</h3>
     <div class="card mshare">
-      <div class="mrow"><button class="mbtn sub" id="shOut">내 기록 공유 코드 만들기</button><button class="mbtn sub" id="shSum">카톡용 요약 만들기</button></div>
-      <textarea id="shBox" rows="4" placeholder="여기에 친구가 보낸 공유 코드를 붙여넣고 [합치기]를 누르세요"></textarea>
-      <div class="mrow"><button class="mbtn" id="shIn">합치기</button><span class="note" id="shMsg"></span></div>
-      <p class="note">공유 코드는 카톡으로 보내면 돼요. 같은 기록은 두 번 들어가지 않아요.</p>
+      <button class="mbtn sub" id="shSum">카톡용 요약 만들기</button>
+      <textarea id="shBox" rows="5" readonly></textarea><span class="note" id="shMsg"></span>
     </div>
   </div>
 
-  <details class="more"><summary>설정 · 이름 · 환율<small>처음 한 번</small></summary><div class="in">
-    <div class="mrow"><label>1번<input id="sN0"></label><label>2번<input id="sN1"></label><label>3번<input id="sN2"></label></div>
-    <label class="full">환율 (100엔 = 원)<input id="sRate" type="number" inputmode="decimal"></label>
-    <div class="mrow"><button class="mbtn" id="sSave">저장</button><button class="mbtn danger" id="sReset">기록 전체 지우기</button></div>
-    <p class="note" id="sMsg">기록 전체 지우기는 두 번 눌러야 지워져요.</p>
+  <details class="more" id="syncSet"><summary>공유 연결 (총무가 처음 한 번)<small>Google 스프레드시트</small></summary><div class="in">
+    <ol class="pts">
+      <li>Google 드라이브에서 <b>새 스프레드시트</b> 만들기 (이름: 간사이 가계부)</li>
+      <li>메뉴 <b>확장 프로그램 → Apps Script</b> → 원래 있던 글을 지우고 아래 코드를 통째로 붙여넣기 → 맨 위 <code>이름1,이름2,이름3</code>을 우리 이름으로 바꾸기 → 저장</li>
+      <li><b>배포 → 새 배포</b> → 유형 <b>웹 앱</b> · 실행 <b>나</b> · 액세스 <b>모든 사용자</b> → 배포 → 권한 허용</li>
+      <li>나온 <b>웹 앱 URL</b>(https://script.google.com/…/exec)을 아래 칸에 붙여넣고 [연결]</li>
+      <li>[친구 초대 링크 만들기] → 카톡방에 보내기. 친구는 그 링크로 한 번만 열면 끝</li>
+    </ol>
+    <textarea id="gsCode" rows="6" readonly>/**
+ * 간사이 여행 공용 가계부 — Google 스프레드시트 연결용 스크립트
+ * 스프레드시트 &gt; 확장 프로그램 &gt; Apps Script 에 이 내용을 통째로 붙여넣고
+ * [배포] &gt; [새 배포] &gt; 유형: 웹 앱 / 실행: 나 / 액세스 권한: 모든 사용자 로 배포하세요.
+ */
+const NAMES = &#x27;이름1,이름2,이름3&#x27;;   // 가계부 이름 (여기서만 바꾸면 모두에게 적용)
+const H = [&#x27;id&#x27;,&#x27;kind&#x27;,&#x27;date&#x27;,&#x27;cat&#x27;,&#x27;desc&#x27;,&#x27;amt&#x27;,&#x27;cur&#x27;,&#x27;pay&#x27;,&#x27;split&#x27;,&#x27;rate&#x27;,&#x27;won&#x27;,&#x27;ts&#x27;,&#x27;deleted&#x27;];
+
+function sheet_(name, header) {
+  const ss = SpreadsheetApp.getActive();
+  let s = ss.getSheetByName(name);
+  if (!s) {
+    s = ss.insertSheet(name);
+    s.getRange(1, 1, 1, header.length).setValues([header]);
+    s.getRange(&#x27;A:Z&#x27;).setNumberFormat(&#x27;@&#x27;);   // 1/29 같은 값이 날짜로 바뀌지 않게
+  }
+  return s;
+}
+
+function conf_() {
+  const c = sheet_(&#x27;config&#x27;, [&#x27;key&#x27;, &#x27;value&#x27;]);
+  const v = c.getDataRange().getValues();
+  const conf = {};
+  v.slice(1).forEach(r =&gt; { if (r[0]) conf[String(r[0])] = String(r[1]); });
+  if (!conf.names) { c.appendRow([&#x27;names&#x27;, NAMES]); conf.names = NAMES; }
+  return conf;
+}
+
+function read_() {
+  const s = sheet_(&#x27;ledger&#x27;, H);
+  const v = s.getDataRange().getValues();
+  const items = v.slice(1).filter(r =&gt; r[0] &amp;&amp; !r[12]).map(r =&gt; {
+    const o = {}; H.forEach((k, i) =&gt; o[k] = r[i]);
+    o.id = String(o.id); o.amt = Number(o.amt) || 0; o.rate = Number(o.rate) || 0; o.won = Number(o.won) || 0; o.ts = Number(o.ts) || 0;
+    o.date = String(o.date); o.pay = String(o.pay); o.split = String(o.split);
+    return o;
+  });
+  return { ok: true, items: items, conf: conf_() };
+}
+
+function out_(o) {
+  return ContentService.createTextOutput(JSON.stringify(o)).setMimeType(ContentService.MimeType.JSON);
+}
+
+function doGet() { return out_(read_()); }
+
+function doPost(e) {
+  const lock = LockService.getScriptLock();
+  lock.waitLock(20000);
+  try {
+    const body = JSON.parse((e &amp;&amp; e.postData &amp;&amp; e.postData.contents) || &#x27;{}&#x27;);
+    const s = sheet_(&#x27;ledger&#x27;, H);
+    const v = s.getDataRange().getValues();
+    const rowOf = new Map(v.slice(1).map((r, i) =&gt; [String(r[0]), i + 2]));
+    (body.add || []).forEach(it =&gt; {
+      if (!it || !it.id || rowOf.has(String(it.id))) return;
+      s.appendRow(H.map(k =&gt; k === &#x27;deleted&#x27; ? &#x27;&#x27; : (it[k] === undefined ? &#x27;&#x27; : String(it[k]))));
+      rowOf.set(String(it.id), s.getLastRow());
+    });
+    (body.del || []).forEach(id =&gt; {
+      const r = rowOf.get(String(id));
+      if (r) s.getRange(r, H.indexOf(&#x27;deleted&#x27;) + 1).setValue(&#x27;1&#x27;);
+    });
+    return out_(read_());
+  } finally {
+    lock.releaseLock();
+  }
+}
+</textarea>
+    <button class="mbtn sub" id="gsCopy">코드 복사</button>
+    <label class="full">웹 앱 URL<input id="syncUrl" placeholder="https://script.google.com/macros/s/…/exec" autocomplete="off"></label>
+    <div class="mrow"><button class="mbtn" id="syncSave">연결</button><button class="mbtn sub" id="syncInvite">친구 초대 링크 만들기</button></div>
+    <p class="note" id="syncMsg">이 주소를 아는 사람은 가계부를 보고 적을 수 있어요. 우리 카톡방에만 보내세요.</p>
   </div></details>
 </section>
 
@@ -1546,32 +1641,44 @@ document.getElementById('tMenu').onclick=()=>{
   document.body.appendChild(ov);
 };
 
-/* ---------- ledger ---------- */
+/* ---------- ledger (shared via Google Sheet, offline queue) ---------- */
 const LG = (()=>{
-  const KEY='trip-ledger-v1', CATS=['식비','카페·간식','교통','입장료','쇼핑','숙박세','마사지','기타'];
-  const START_CASH=35000, START_CARD_KRW=946152;
-  let D={names:['나','친구1','친구2'], rate:844, items:[]};
-  try{ const x=JSON.parse(localStorage.getItem(KEY)||'null'); if(x&&x.items) D=Object.assign(D,x); }catch(e){}
-  try{ const h=location.hash.match(/names=([^&]+)/); if(h){ const arr=decodeURIComponent(h[1]).split(',').map(x=>x.trim()).filter(Boolean).slice(0,3); if(arr.length===3){ D.names=arr; try{ localStorage.setItem(KEY, JSON.stringify(D)); }catch(e){} } history.replaceState(null,'',location.pathname+location.search); } }catch(e){}
+  const KEY='trip-ledger-v2', CATS=['식비','카페·간식','교통','입장료','쇼핑','숙박세','마사지','기타'];
+  const START_CASH=35000, START_CARD_KRW=946152, BASE_RATE=844;
+  let D={names:['나','친구1','친구2'], items:[], pendAdd:[], pendDel:[], url:'', last:0};
+  try{ const x=JSON.parse(localStorage.getItem(KEY)||'null'); if(x) D=Object.assign(D,x); }catch(e){}
+  try{ const o=JSON.parse(localStorage.getItem('trip-ledger-v1')||'null'); if(o&&o.items&&o.items.length&&!D.items.length){ D.items=o.items.map(x=>Object.assign({kind:'spend',rate:o.rate||BASE_RATE,ts:Date.now()},x)); D.pendAdd=D.items.map(x=>x.id); } }catch(e){}
+  try{ const h=new URLSearchParams(location.hash.slice(1)); let ch=false;
+    if(h.get('sync')){ D.url=h.get('sync'); ch=true; }
+    if(h.get('names')){ const n=h.get('names').split(',').map(x=>x.trim()).filter(Boolean); if(n.length===3){ D.names=n; ch=true; } }
+    if(ch) history.replaceState(null,'',location.pathname+location.search); }catch(e){}
   const save=()=>{ try{ localStorage.setItem(KEY, JSON.stringify(D)); }catch(e){} };
-  const yen=it=> it.cur==='KRW' ? Math.round(it.amt*100/D.rate) : it.amt;
+  save();
+  const $m=id=>document.getElementById(id);
   const fmt=n=> Math.round(n).toLocaleString('ko-KR');
+  const spends=()=>D.items.filter(x=>(x.kind||'spend')==='spend');
+  function curRate(){ const r=D.items.filter(x=>x.kind==='fx'||x.kind==='rate').sort((a,b)=>(a.ts||0)-(b.ts||0)); return r.length? +r[r.length-1].rate : BASE_RATE; }
+  const yen=it=> it.cur==='KRW' ? Math.round(it.amt*100/(+it.rate||curRate())) : +it.amt;
   const who=v=> v==='cash'?'공금 현금':v==='card'?'공금 카드':v==='all'?'셋이 같이':D.names[+v];
   let cat='식비';
-  const $m=id=>document.getElementById(id);
   function opts(){
+    const p=$m('fPay').value, sp=$m('fSplit').value;
     $m('fPay').innerHTML=[['cash','공금 현금 (엔)'],['card','공금 카드'],...D.names.map((n,i)=>[i,n+' (개인 돈)'])].map(([v,t])=>`<option value="${v}">${t}</option>`).join('');
     $m('fSplit').innerHTML=[['all','셋이 같이'],...D.names.map((n,i)=>[i,n+'만'])].map(([v,t])=>`<option value="${v}">${t}</option>`).join('');
+    if(p) $m('fPay').value=p; if(sp) $m('fSplit').value=sp;
     $m('fCat').innerHTML=CATS.map(c=>`<button type="button" aria-pressed="${c===cat}">${c}</button>`).join('');
     $m('fCat').querySelectorAll('button').forEach(b=>b.onclick=()=>{cat=b.textContent; opts();});
-    D.names.forEach((n,i)=>$m('sN'+i).value=n); $m('sRate').value=D.rate;
   }
-  function add(it){ it.id=it.id||Date.now().toString(36)+Math.random().toString(36).slice(2,6); D.items.push(it); save(); render(); }
+  function add(it){ it.id=Date.now().toString(36)+Math.random().toString(36).slice(2,6); it.ts=Date.now(); it.kind=it.kind||'spend'; if(!it.rate) it.rate=curRate();
+    D.items.push(it); D.pendAdd.push(it.id); save(); render(); sync(); }
   function calc(){
-    let cash=START_CASH, cardK=START_CARD_KRW, total=0; const per=[0,0,0], bycat={}; const bal={g:0,0:0,1:0,2:0};
+    let cash=START_CASH, cardK=START_CARD_KRW, total=0; const per=[0,0,0], bycat={}, bal={g:0,0:0,1:0,2:0};
     D.items.forEach(it=>{
+      if(it.kind==='fx'){ cash+= +it.amt; if(it.pay==='card') cardK-= +it.won; return; }
+      if(it.kind==='rate') return;
       const y=yen(it); total+=y; bycat[it.cat]=(bycat[it.cat]||0)+y;
-      if(it.pay==='cash') cash-=y; if(it.pay==='card') cardK-= it.cur==='KRW'?it.amt:Math.round(it.amt*D.rate/100);
+      if(it.pay==='cash') cash-=y;
+      if(it.pay==='card') cardK-= it.cur==='KRW' ? +it.amt : Math.round(it.amt*(+it.rate||curRate())/100);
       if(it.split==='all') per.forEach((_,i)=>per[i]+=y/3); else per[+it.split]+=y;
       const pub=(it.pay==='cash'||it.pay==='card');
       if(pub && it.split!=='all'){ bal[+it.split]-=y; bal.g+=y; }
@@ -1586,24 +1693,54 @@ const LG = (()=>{
     while(i<db.length&&j<cr.length){ const a=Math.min(db[i][1],cr[j][1]); out.push(`<li><b>${name(db[i][0])}</b> → <b>${name(cr[j][0])}</b> : ${fmt(a)}엔</li>`); db[i][1]-=a; cr[j][1]-=a; if(db[i][1]<0.5)i++; if(cr[j][1]<0.5)j++; }
     return out.length?`<ul class="pts settle">${out.join('')}</ul><p class="note">"공금 →"은 공금에서 꺼내 돌려주기, "→ 공금"은 공금 지갑에 넣기.</p>`:'<p class="note">정산할 게 없어요. 공금으로 같이 쓴 돈은 정산이 필요 없어요.</p>';
   }
+  function syncLabel(state){
+    const el=$m('mSync'); const n=D.pendAdd.length+D.pendDel.length;
+    if(!D.url){ el.className='sync off'; el.innerHTML='🔒 아직 공유 연결 전이에요 — 이 휴대폰에만 저장돼요. 맨 아래 <b>공유 연결</b>에서 한 번만 설정하세요.'; return; }
+    const t=D.last? new Date(D.last).toLocaleTimeString('ko-KR',{hour:'2-digit',minute:'2-digit'}) : '-';
+    if(state==='busy'){ el.className='sync'; el.textContent='🔄 맞추는 중…'; return; }
+    if(state==='err'||!navigator.onLine){ el.className='sync off'; el.textContent=`📴 오프라인 — ${n?n+'건은 연결되면 자동으로 올라가요':'연결되면 다시 맞춰요'} · 마지막 ${t}`; return; }
+    el.className='sync on'; el.textContent=`🟢 셋이 같이 보는 중 · 마지막 맞춤 ${t}${n?` · 대기 ${n}건`:''}`;
+  }
+  let busy=false;
+  async function sync(){
+    if(!D.url||busy) { syncLabel(); return; } busy=true; syncLabel('busy');
+    try{
+      const add=D.items.filter(x=>D.pendAdd.includes(x.id)), del=[...D.pendDel];
+      const r=await fetch(D.url,{method:'POST',body:JSON.stringify({add,del}),redirect:'follow'});
+      const j=await r.json(); if(!j.ok) throw new Error('bad');
+      const sent=new Set(add.map(x=>x.id)), sentDel=new Set(del);
+      D.pendAdd=D.pendAdd.filter(id=>!sent.has(id)); D.pendDel=D.pendDel.filter(id=>!sentDel.has(id));
+      const local=D.items.filter(x=>D.pendAdd.includes(x.id));
+      D.items=j.items.filter(x=>!D.pendDel.includes(x.id)).concat(local);
+      if(j.conf&&j.conf.names){ const n=j.conf.names.split(',').map(x=>x.trim()).filter(Boolean); if(n.length===3) D.names=n; }
+      D.last=Date.now(); save(); busy=false; opts(); render(); syncLabel();
+    }catch(e){ busy=false; syncLabel('err'); }
+  }
   function render(){
-    const c=calc();
-    $m('mStats').innerHTML=`<div class="ms ${c.cash<5000?'low':''}"><span>공금 현금 남음</span><b>${fmt(c.cash)}엔</b><small>시작 35,000엔</small></div>
-      <div class="ms"><span>공금 카드 남음</span><b>${fmt(c.cardK)}원</b><small>약 ${fmt(c.cardK*100/D.rate)}엔</small></div>
-      <div class="ms"><span>여행 중 쓴 돈</span><b>${fmt(c.total)}엔</b><small>약 ${fmt(c.total*D.rate/100)}원</small></div>
+    const c=calc(), rate=curRate();
+    $m('mStats').innerHTML=`<div class="ms ${c.cash<5000?'low':''}"><span>공금 현금 남음</span><b>${fmt(c.cash)}엔</b><small>환전 포함</small></div>
+      <div class="ms"><span>공금 카드(회비) 남음</span><b>${fmt(c.cardK)}원</b><small>약 ${fmt(c.cardK*100/rate)}엔</small></div>
+      <div class="ms"><span>여행 중 쓴 돈</span><b>${fmt(c.total)}엔</b><small>약 ${fmt(c.total*rate/100)}원</small></div>
       <div class="ms"><span>1인 평균</span><b>${fmt(c.total/3)}엔</b><small>${D.names.map((n,i)=>n+' '+fmt(c.per[i])).join(' · ')}</small></div>`;
+    $m('rNow').innerHTML=`지금 환율 <b>100엔 = ${(+rate).toFixed(1)}원</b>`;
+    const fx=D.items.filter(x=>x.kind==='fx'||x.kind==='rate').sort((a,b)=>(a.ts||0)-(b.ts||0));
+    $m('xList').innerHTML=`<div class="mit pre"><div class="t">출발 전 환전 35,000엔<small>26.10.07 · 100엔 = 844원</small></div><span class="a">295,547원</span><span></span></div>`+
+      fx.map(x=>`<div class="mit"><div class="t">${x.kind==='fx'?`환전 ${fmt(x.amt)}엔`:'오늘 환율'}<small>${x.date||''} · 100엔 = ${(+x.rate).toFixed(1)}원${x.kind==='fx'?(x.pay==='card'?' · 회비에서':' · 따로'):''}</small></div><span class="a">${x.kind==='fx'?fmt(x.won)+'원':''}</span><button class="del" data-id="${x.id}">삭제</button></div>`).join('');
     $m('mSettle').innerHTML=settle(c.bal);
     const mx=Math.max(1,...Object.values(c.bycat));
     $m('mCats').innerHTML=Object.keys(c.bycat).length?CATS.filter(k=>c.bycat[k]).map(k=>`<div class="bar"><span>${k}</span><i style="width:${Math.max(3,c.bycat[k]/mx*100)}%"></i><b>${fmt(c.bycat[k])}엔</b></div>`).join(''):'<p class="note">아직 기록이 없어요.</p>';
-    const days=['1/29','1/30','1/31','2/1'];
+    const days=['1/29','1/30','1/31','2/1'], sp=spends();
     $m('mList').innerHTML=`<div class="mday"><b>출발 전 (회비에서 결제)</b>
         <div class="mit pre"><div class="t">항공권 3인<small>26.10.07</small></div><span class="a">984,898원</span><span></span></div>
         <div class="mit pre"><div class="t">숙소 3박 3인<small>숙박세 별도</small></div><span class="a">473,403원</span><span></span></div>
         <div class="mit pre"><div class="t">환전 35,000엔<small>→ 공금 현금으로</small></div><span class="a">295,547원</span><span></span></div></div>`+
-      days.map(d=>{ const its=D.items.filter(x=>x.date===d); if(!its.length) return '';
+      days.map(d=>{ const its=sp.filter(x=>x.date===d).sort((a,b)=>(a.ts||0)-(b.ts||0)); if(!its.length) return '';
         const sum=its.reduce((a,x)=>a+yen(x),0);
-        return `<div class="mday"><b>${d} · ${fmt(sum)}엔</b>${its.map(x=>`<div class="mit"><div class="t">${x.desc||x.cat}<small>${x.cat} · ${who(x.pay)} 냄 · ${who(x.split)}</small></div><span class="a">${fmt(x.amt)}${x.cur==='KRW'?'원':'엔'}</span><button class="del" data-id="${x.id}">삭제</button></div>`).join('')}</div>`; }).join('');
-    $m('mList').querySelectorAll('.del').forEach(b=>b.onclick=()=>{ if(!b.classList.contains('arm')){ b.classList.add('arm'); b.textContent='한 번 더'; setTimeout(()=>{b.classList.remove('arm'); b.textContent='삭제';},2500); return; } D.items=D.items.filter(x=>x.id!==b.dataset.id); save(); render(); });
+        return `<div class="mday"><b>${d} · ${fmt(sum)}엔</b>${its.map(x=>`<div class="mit${D.pendAdd.includes(x.id)?' wait':''}"><div class="t">${x.desc||x.cat}<small>${x.cat} · ${who(x.pay)} 냄 · ${who(x.split)}${D.pendAdd.includes(x.id)?' · 올리기 대기':''}</small></div><span class="a">${fmt(x.amt)}${x.cur==='KRW'?'원':'엔'}</span><button class="del" data-id="${x.id}">삭제</button></div>`).join('')}</div>`; }).join('');
+    document.querySelectorAll('#money .del').forEach(b=>b.onclick=()=>{ if(!b.classList.contains('arm')){ b.classList.add('arm'); b.textContent='한 번 더'; setTimeout(()=>{b.classList.remove('arm'); b.textContent='삭제';},2500); return; }
+      const id=b.dataset.id; if(D.pendAdd.includes(id)) D.pendAdd=D.pendAdd.filter(x=>x!==id); else D.pendDel.push(id);
+      D.items=D.items.filter(x=>x.id!==id); save(); render(); sync(); });
+    syncLabel();
   }
   function init(){
     opts(); render();
@@ -1612,16 +1749,22 @@ const LG = (()=>{
       $m('fDesc').value=''; $m('fAmt').value=''; };
     const Q={tax1:['1/29','교토 숙박세',1200],tax2:['1/30','오사카 숙박세',1500],tax3:['1/31','공항 숙박세',600]};
     document.querySelectorAll('#money .quick button').forEach(b=>b.onclick=()=>{ const q=Q[b.dataset.q]; add({date:q[0],cat:'숙박세',desc:q[1],amt:q[2],cur:'JPY',pay:'cash',split:'all'}); });
-    const box=$m('shBox'), msg=$m('shMsg');
-    const show=t=>{ box.value=t; box.focus(); box.select(); try{ navigator.clipboard.writeText(t).then(()=>msg.textContent='복사됐어요. 카톡에 붙여넣기!',()=>msg.textContent='위 글을 길게 눌러 복사하세요.'); }catch(e){ msg.textContent='위 글을 길게 눌러 복사하세요.'; } };
-    $m('shOut').onclick=()=>show('TRIPLEDGER:'+btoa(unescape(encodeURIComponent(JSON.stringify(D.items)))));
-    $m('shSum').onclick=()=>{ const c=calc(); show(`[오사카·교토 가계부]\n여행 중 쓴 돈 ${fmt(c.total)}엔 (1인 ${fmt(c.total/3)}엔)\n공금 현금 남음 ${fmt(c.cash)}엔 · 공금 카드 남음 ${fmt(c.cardK)}원\n`+CATS.filter(k=>c.bycat[k]).map(k=>`- ${k} ${fmt(c.bycat[k])}엔`).join('\n')); };
-    $m('shIn').onclick=()=>{ const t=box.value.trim(); const m=t.match(/TRIPLEDGER:([A-Za-z0-9+/=]+)/); if(!m){ msg.textContent='공유 코드가 아니에요. TRIPLEDGER: 로 시작하는 글을 붙여넣어 주세요.'; return; }
-      try{ const arr=JSON.parse(decodeURIComponent(escape(atob(m[1])))); const ids=new Set(D.items.map(x=>x.id)); let n=0; arr.forEach(x=>{ if(x&&x.id&&!ids.has(x.id)&&x.amt>0){ D.items.push(x); n++; } }); save(); render(); msg.textContent=n+'건 합쳤어요.'; box.value=''; }catch(e){ msg.textContent='코드가 깨졌어요. 다시 복사해 주세요.'; } };
-    $m('sSave').onclick=()=>{ [0,1,2].forEach(i=>{ const v=$m('sN'+i).value.trim(); if(v) D.names[i]=v.slice(0,8); }); const r=parseFloat($m('sRate').value); if(r>300&&r<2000) D.rate=r; save(); opts(); render(); $m('sMsg').textContent='저장했어요.'; };
-    let armed=false; $m('sReset').onclick=()=>{ if(!armed){ armed=true; $m('sMsg').textContent='정말 지우려면 한 번 더 누르세요.'; setTimeout(()=>armed=false,3000); return; } D.items=[]; save(); render(); $m('sMsg').textContent='기록을 모두 지웠어요.'; };
+    $m('rDayBtn').onclick=()=>{ const r=parseFloat($m('rDay').value); if(!(r>300&&r<2000)){ $m('rDay').focus(); return; } add({kind:'rate',rate:r,date:$m('fDate').value,amt:0}); $m('rDay').value=''; };
+    $m('xAdd').onclick=()=>{ const w=parseFloat($m('xWon').value), y=parseFloat($m('xYen').value); if(!(w>0)){ $m('xWon').focus(); return; } if(!(y>0)){ $m('xYen').focus(); return; }
+      add({kind:'fx',amt:y,won:w,rate:Math.round(w/y*1000)/10,date:$m('xDate').value,pay:$m('xFrom').value}); $m('xWon').value=''; $m('xYen').value=''; };
+    const copy=(t,msg)=>{ try{ navigator.clipboard.writeText(t).then(()=>msg.textContent='복사됐어요. 카톡에 붙여넣기!',()=>msg.textContent='길게 눌러 복사하세요.'); }catch(e){ msg.textContent='길게 눌러 복사하세요.'; } };
+    $m('shSum').onclick=()=>{ const c=calc(); const t=`[간사이 가계부]\n여행 중 쓴 돈 ${fmt(c.total)}엔 (1인 ${fmt(c.total/3)}엔)\n공금 현금 남음 ${fmt(c.cash)}엔 · 공금 카드 남음 ${fmt(c.cardK)}원\n`+CATS.filter(k=>c.bycat[k]).map(k=>`- ${k} ${fmt(c.bycat[k])}엔`).join('\n'); $m('shBox').value=t; $m('shBox').select(); copy(t,$m('shMsg')); };
+    $m('gsCopy').onclick=()=>{ $m('gsCode').select(); copy($m('gsCode').value,$m('syncMsg')); };
+    $m('syncUrl').value=D.url||'';
+    $m('syncSave').onclick=()=>{ const u=$m('syncUrl').value.trim(); if(!/^https:\/\/script\.google(usercontent)?\.com\//.test(u)){ $m('syncMsg').textContent='https://script.google.com/ 으로 시작하는 웹 앱 URL을 넣어 주세요.'; return; }
+      D.url=u; D.pendAdd=[...new Set(D.pendAdd.concat(D.items.map(x=>x.id)))]; save(); $m('syncMsg').textContent='연결했어요. 맞추는 중…'; sync().then(()=>{ $m('syncMsg').textContent= D.last?'연결 완료! 이제 [친구 초대 링크 만들기]를 눌러 카톡방에 보내세요.':'연결이 안 돼요. 배포 액세스가 "모든 사용자"인지 확인해 주세요.'; }); };
+    $m('syncInvite').onclick=()=>{ if(!D.url){ $m('syncMsg').textContent='먼저 [연결]을 해 주세요.'; return; } const link=location.origin+location.pathname+'#sync='+encodeURIComponent(D.url); $m('syncUrl').value=link; $m('syncUrl').select(); copy(link,$m('syncMsg')); };
+    window.addEventListener('online',sync);
+    document.addEventListener('visibilitychange',()=>{ if(!document.hidden) sync(); });
+    setInterval(()=>{ if(!document.hidden && document.querySelector('.tab[data-tab="money"][aria-selected="true"]')) sync(); },30000);
+    sync();
   }
-  return {init};
+  return {init, sync};
 })();
 LG.init();
 
@@ -1636,6 +1779,7 @@ function openTab(id){
     if(id==='busy'||id==='calm'){ renderVersion(id); document.getElementById(id)._show(0,false); }
     if(id==='food') renderFood();
   }
+  if(id==='money' && typeof LG!=='undefined') LG.sync();
 }
 function goTab(id){
   openTab(id);
